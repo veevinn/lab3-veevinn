@@ -37,22 +37,24 @@ void Initialize() {
 	TCCR0B |= (1<<CS02);
 	
 	// clock in Phase Correct PWM mode
-	TCCR0A |= (1<<WGM00);
-	TCCR0A &= ~(1<<WGM01);
-	TCCR0B |= (1<<WGM02);
+	TCCR0A &= ~(1<<WGM00);
+	TCCR0A |= (1<<WGM01);
+	TCCR0B &= ~(1<<WGM02);
 	
-	TCCR0A |= (1<<COM0B1);
 	TCCR0A |= (1<<COM0A0);
-	OCR0A = 30;
-	OCR0B = 15;
+	TCCR0A |= (1<<COM0B1);
+	
+	// 440 Hz output capture
+	OCR0A = 17;
+	OCR0B = 9;
 
 	TIMSK0 |= (1<<OCIE0A);
-	TIFR0 |= (1<<OCF0B);
+	TIFR0 |= (1<<OCF0A);
 	
 	sei();
 }
-
-/*ISR(TIMER0_COMPA_vect) {
+/*
+ISR(TIMER0_COMPA_vect) {
 	PORTD ^= (1<<PORTD6);
 	TCNT0 = 0;
 }
