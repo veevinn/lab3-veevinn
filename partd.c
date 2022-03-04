@@ -145,25 +145,25 @@ ISR(TIMER0_COMPA_vect){
 			OCR0A = 477;
 		}
 		if(dist > 33 && dist <= 66) {
-			OCR0A = 477;
+			OCR0A = 506;
 		}
 		if(dist > 66 && dist <= 100) {
-			OCR0A = 477;
+			OCR0A = 568;
 		}
 		if(dist > 100 && dist <= 133) {
-			OCR0A = 477;
+			OCR0A = 637;
 		}
 		if(dist > 133 && dist <= 166) {
-			OCR0A = 477;
+			OCR0A = 715;
 		}
 		if(dist > 166 && dist <= 200) {
-			OCR0A = 477;
+			OCR0A = 758;
 		}
 		if(dist > 200 && dist <= 233) {
-			OCR0A = 477;
+			OCR0A = 851;
 		}
 		if(dist > 233 && dist <= 267) {
-			OCR0A = 477;
+			OCR0A = 956;
 		}
 	}
 	OCR0B = OCR0A / 2;
