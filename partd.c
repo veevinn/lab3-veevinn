@@ -84,9 +84,21 @@ void Initialize(){
 	TIFR1 |= (1<<TOV1);
 	
 	DDRB &= ~(1<<DDB1);
-	
+	PCICR |= (1<<PCIE0);
+	PCMSK0 |= (1<<PCINT1);
 	
 	sei();//Enable global interrupts
+}
+
+ISR(PCINT0_vect) {
+	if(PINB && (1<<PINB1)){
+		if(cont_mode == 1) {
+			cont_mode = 0;
+		}
+		else {
+			cont_mode = 1;
+		}
+	}
 }
 
 //Input Capture Interrupt that measures the distance being outputted by the Ultrasonic Sensor
@@ -103,7 +115,36 @@ ISR(TIMER1_CAPT_vect)
 		end = ICR1;
 		// Calculate the distance in centimeters with calibration factor 0.5, calculation deals with cm and us
 		dist = ((end-start)*0.034/2)*0.5;
-		ocra = (dist)*1.724 + 477;				
+		if(cont_mode == 1){
+			ocra = (dist)*1.724 + 477;
+		}
+		else {
+			if(dist > 0 && dist <= 33) {
+				ocra = 477;
+			}
+			if(dist > 33 && dist <= 66) {
+				ocra = 506;
+			}
+			if(dist > 66 && dist <= 100) {
+				ocra = 568;
+			}
+			if(dist > 100 && dist <= 133) {
+				ocra = 637;
+			}
+			if(dist > 133 && dist <= 166) {
+				ocra = 715;
+			}
+			if(dist > 166 && dist <= 200) {
+				ocra = 758;
+			}
+			if(dist > 200 && dist <= 233) {
+				ocra = 851;
+			}
+			if(dist > 233 && dist <= 267) {
+				ocra = 956;
+			}
+		}
+						
 		TCCR1B |= (1<<ICES1);
 		rising = 1;
 	}
@@ -129,44 +170,9 @@ ISR(TIMER1_OVF_vect)
 }
 
 ISR(TIMER0_COMPA_vect){
-	if(PINB && (1<<PINB1)){
-		if(cont_mode == 1) {
-			cont_mode = 0;
-		}
-		else {
-			cont_mode = 1;
-		}
-	}
-	if(cont_mode == 1){
-		OCR0A = ocra;
-	}
-	else {
-		if(dist > 0 && dist <= 33) {
-			OCR0A = 477;
-		}
-		if(dist > 33 && dist <= 66) {
-			OCR0A = 506;
-		}
-		if(dist > 66 && dist <= 100) {
-			OCR0A = 568;
-		}
-		if(dist > 100 && dist <= 133) {
-			OCR0A = 637;
-		}
-		if(dist > 133 && dist <= 166) {
-			OCR0A = 715;
-		}
-		if(dist > 166 && dist <= 200) {
-			OCR0A = 758;
-		}
-		if(dist > 200 && dist <= 233) {
-			OCR0A = 851;
-		}
-		if(dist > 233 && dist <= 267) {
-			OCR0A = 956;
-		}
-	}
-	OCR0B = OCR0A / 2;
+	
+	OCR0A = ocra;
+	OCR0B = ocra / 2;
 }
 
 int main(void)
