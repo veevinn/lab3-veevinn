@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <util/delay.h>
-#include "serialparta.h"
+#include "parta.h"
 
 char String[25];
 volatile int dist = 0;
@@ -180,7 +180,7 @@ ISR(TIMER1_OVF_vect)
 	if (dist >= 0 && dist <= 400)
 	{
 		sprintf(String,"Distance: %u cm\n", dist);
-		serialparta_output(String);
+		parta_output(String);
 		dist = 0;
 	}
 	
@@ -246,6 +246,6 @@ ISR(TIMER0_COMPB_vect) {
 int main(void)
 {
 	Initialize();
-	serialparta_init(BAUD_PRESCALER);
+	parta_init(BAUD_PRESCALER);
 	while(1);
 }
