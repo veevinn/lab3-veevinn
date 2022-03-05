@@ -180,7 +180,7 @@ ISR(TIMER1_OVF_vect)
 	if (dist >= 0 && dist <= 400)
 	{
 		sprintf(String,"Distance: %u cm\n", dist);
-		parta_output(String);
+		PARTA_output(String);
 		dist = 0;
 	}
 	
@@ -246,6 +246,6 @@ ISR(TIMER0_COMPB_vect) {
 int main(void)
 {
 	Initialize();
-	parta_init(BAUD_PRESCALER);
+	PARTA_init(BAUD_PRESCALER);
 	while(1);
 }
