@@ -1,7 +1,7 @@
 #include "parta.h"
 #include <avr/io.h>
 
-void parta_init(int prescalar)
+void PARTA_init(int prescalar)
 {
   
   /*Set baud rate */
@@ -14,7 +14,7 @@ void parta_init(int prescalar)
   UCSR0C |= (1<<USBS0); // 2 stop bits
 }
 
-void parta_output(char* strpt)
+void PARTA_output(char* strpt)
 {
   while(*strpt != 0x00)
   {
